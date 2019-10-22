@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class RabbitApplication {
-    private final static String proQUEUE = "producerqueue";
+    private final static String QUEUE_Car = "carqueue";
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(RabbitApplication.class, args);
@@ -35,13 +35,13 @@ public class RabbitApplication {
         Channel channel = connection.createChannel();
         try
         {
-            channel.queueDeclare(proQUEUE, false, false, false, null);
-            channel.basicPublish("", proQUEUE, null, message.getBytes("UTF-8"));
+            channel.queueDeclare(QUEUE_Car, false, false, false, null);
+            channel.basicPublish("", QUEUE_Car, null, message.getBytes("UTF-8"));
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        channel.queueDeclare(proQUEUE, false, false, false, null);
+        channel.queueDeclare(QUEUE_Car, false, false, false, null);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
         // Get notified, if a message for this receiver arrives
         DeliverCallback deliverCallback = (consumerTag, delivery) ->
@@ -50,10 +50,10 @@ public class RabbitApplication {
             System.out.println(" [x] Received '" + message2 + "'");
             if(message2.equals("1")){
                 String msg = "you order mercdes";
-                channel.basicPublish("", proQUEUE, null, msg.getBytes("UTF-8"));
+                channel.basicPublish("", QUEUE_Car, null, msg.getBytes("UTF-8"));
             }
         };
-        channel.basicConsume(proQUEUE, true, deliverCallback, consumerTag -> {});
+        channel.basicConsume(QUEUE_Car, true, deliverCallback, consumerTag -> {});
     }
 
 }

@@ -10,7 +10,7 @@ import java.util.Scanner;
 @SpringBootApplication
 public class RabbitApplication
 {
-    private final static String conQUEUE = "con que";
+    private final static String QUEUE_Car = "carqueue";
 
     public static void main(String[] args) throws Exception
     {
@@ -30,14 +30,14 @@ public class RabbitApplication
         Channel channel = connection.createChannel();
         try
         {
-            channel.queueDeclare(conQUEUE, false, false, false, null);
-            channel.basicPublish("", conQUEUE, null, msg.getBytes("UTF-8"));
+            channel.queueDeclare(QUEUE_Car, false, false, false, null);
+            channel.basicPublish("", QUEUE_Car, null, msg.getBytes("UTF-8"));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         // Register for a queue
-        channel.queueDeclare(conQUEUE, false, false, false, null);
+        channel.queueDeclare(QUEUE_Car, false, false, false, null);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         // Get notified, if a message for this receiver arrives
@@ -52,7 +52,7 @@ public class RabbitApplication
                 System.out.println(" [x] Received '" + message + "'");
             }
         };
-        channel.basicConsume(conQUEUE, true, deliverCallback, consumerTag -> {});
+        channel.basicConsume(QUEUE_Car, true, deliverCallback, consumerTag -> {});
 
 
 
